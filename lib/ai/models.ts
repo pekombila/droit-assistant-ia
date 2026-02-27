@@ -1,5 +1,4 @@
-// Curated list of top models from Vercel AI Gateway
-export const DEFAULT_CHAT_MODEL = "google/gemini-2.5-flash-lite";
+export const DEFAULT_CHAT_MODEL = "mistral-large-latest";
 
 export type ChatModel = {
   id: string;
@@ -9,6 +8,19 @@ export type ChatModel = {
 };
 
 export const chatModels: ChatModel[] = [
+  {
+    id: "mistral-large-latest",
+    name: "Mistral Large (Gabon)",
+    provider: "mistral",
+    description:
+      "Assistant juridique gabonais - Droit du Travail & Protection Sociale",
+  },
+  {
+    id: "mistral-small-latest",
+    name: "Mistral Small (Gabon)",
+    provider: "mistral",
+    description: "Version rapide et légère de l'assistant juridique",
+  },
   // Anthropic
   {
     id: "anthropic/claude-haiku-4.5",

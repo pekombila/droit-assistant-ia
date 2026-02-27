@@ -42,3 +42,9 @@ yarn-error.log*
 /playwright-report/
 /blob-report/
 /playwright/*
+
+# Build artifacts
+tsconfig.tsbuildinfo
+
+# Legal source PDFs (textes ingérés en DB, pas besoin de versionner les PDFs)
+data/legal/*.pdf

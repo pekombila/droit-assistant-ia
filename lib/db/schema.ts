@@ -2,18 +2,22 @@ import type { InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
+  index,
+  integer,
   json,
+  jsonb,
   pgTable,
   primaryKey,
   text,
   timestamp,
   uuid,
   varchar,
+  vector,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable("User", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
-  email: varchar("email", { length: 64 }).notNull(),
+  email: varchar("email", { length: 254 }).notNull().unique(),
   password: varchar("password", { length: 64 }),
 });
 
@@ -25,7 +29,7 @@ export const chat = pgTable("Chat", {
   title: text("title").notNull(),
   userId: uuid("userId")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   visibility: varchar("visibility", { enum: ["public", "private"] })
     .notNull()
     .default("private"),
@@ -33,25 +37,12 @@ export const chat = pgTable("Chat", {
 
 export type Chat = InferSelectModel<typeof chat>;
 
-// DEPRECATED: The following schema is deprecated and will be removed in the future.
-// Read the migration guide at https://chat-sdk.dev/docs/migration-guides/message-parts
-export const messageDeprecated = pgTable("Message", {
-  id: uuid("id").primaryKey().notNull().defaultRandom(),
-  chatId: uuid("chatId")
-    .notNull()
-    .references(() => chat.id),
-  role: varchar("role").notNull(),
-  content: json("content").notNull(),
-  createdAt: timestamp("createdAt").notNull(),
-});
-
-export type MessageDeprecated = InferSelectModel<typeof messageDeprecated>;
 
 export const message = pgTable("Message_v2", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   chatId: uuid("chatId")
     .notNull()
-    .references(() => chat.id),
+    .references(() => chat.id, { onDelete: "cascade" }),
   role: varchar("role").notNull(),
   parts: json("parts").notNull(),
   attachments: json("attachments").notNull(),
@@ -60,37 +51,16 @@ export const message = pgTable("Message_v2", {
 
 export type DBMessage = InferSelectModel<typeof message>;
 
-// DEPRECATED: The following schema is deprecated and will be removed in the future.
-// Read the migration guide at https://chat-sdk.dev/docs/migration-guides/message-parts
-export const voteDeprecated = pgTable(
-  "Vote",
-  {
-    chatId: uuid("chatId")
-      .notNull()
-      .references(() => chat.id),
-    messageId: uuid("messageId")
-      .notNull()
-      .references(() => messageDeprecated.id),
-    isUpvoted: boolean("isUpvoted").notNull(),
-  },
-  (table) => {
-    return {
-      pk: primaryKey({ columns: [table.chatId, table.messageId] }),
-    };
-  }
-);
-
-export type VoteDeprecated = InferSelectModel<typeof voteDeprecated>;
 
 export const vote = pgTable(
   "Vote_v2",
   {
     chatId: uuid("chatId")
       .notNull()
-      .references(() => chat.id),
+      .references(() => chat.id, { onDelete: "cascade" }),
     messageId: uuid("messageId")
       .notNull()
-      .references(() => message.id),
+      .references(() => message.id, { onDelete: "cascade" }),
     isUpvoted: boolean("isUpvoted").notNull(),
   },
   (table) => {
@@ -109,12 +79,12 @@ export const document = pgTable(
     createdAt: timestamp("createdAt").notNull(),
     title: text("title").notNull(),
     content: text("content"),
-    kind: varchar("text", { enum: ["text", "code", "image", "sheet"] })
+    kind: varchar("kind", { enum: ["text", "code", "image", "sheet"] })
       .notNull()
       .default("text"),
     userId: uuid("userId")
       .notNull()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
   },
   (table) => {
     return {
@@ -137,7 +107,7 @@ export const suggestion = pgTable(
     isResolved: boolean("isResolved").notNull().default(false),
     userId: uuid("userId")
       .notNull()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
     createdAt: timestamp("createdAt").notNull(),
   },
   (table) => ({
@@ -145,7 +115,7 @@ export const suggestion = pgTable(
     documentRef: foreignKey({
       columns: [table.documentId, table.documentCreatedAt],
       foreignColumns: [document.id, document.createdAt],
-    }),
+    }).onDelete("cascade"),
   })
 );
 
@@ -163,8 +133,46 @@ export const stream = pgTable(
     chatRef: foreignKey({
       columns: [table.chatId],
       foreignColumns: [chat.id],
-    }),
+    }).onDelete("cascade"),
   })
 );
 
 export type Stream = InferSelectModel<typeof stream>;
+
+// --- RAG: Legal Knowledge Base ---
+
+export const legalDocument = pgTable("LegalDocument", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  title: text("title").notNull(),
+  lawReference: varchar("lawReference", { length: 100 }).notNull(),
+  sourceFile: text("sourceFile"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+});
+
+export type LegalDocument = InferSelectModel<typeof legalDocument>;
+
+export const legalChunk = pgTable(
+  "LegalChunk",
+  {
+    id: uuid("id").primaryKey().notNull().defaultRandom(),
+    documentId: uuid("documentId")
+      .notNull()
+      .references(() => legalDocument.id, { onDelete: "cascade" }),
+    chunkIndex: integer("chunkIndex").notNull(),
+    articleNumber: varchar("articleNumber", { length: 20 }),
+    content: text("content").notNull(),
+    embedding: vector("embedding", { dimensions: 384 }),
+    tokens: integer("tokens"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+  },
+  (table) => ({
+    embeddingIdx: index("LegalChunk_embedding_idx").using(
+      "hnsw",
+      table.embedding.op("vector_cosine_ops")
+    ),
+    documentIdx: index("LegalChunk_documentId_idx").on(table.documentId),
+  })
+);
+
+export type LegalChunk = InferSelectModel<typeof legalChunk>;

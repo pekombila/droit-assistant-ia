@@ -1,4 +1,5 @@
 import { gateway } from "@ai-sdk/gateway";
+import { createMistral } from "@ai-sdk/mistral";
 import {
   customProvider,
   extractReasoningMiddleware,
@@ -7,6 +8,10 @@ import {
 import { isTestEnvironment } from "../constants";
 
 const THINKING_SUFFIX_REGEX = /-thinking$/;
+
+const mistral = createMistral({
+  apiKey: process.env.MISTRAL_API_KEY,
+});
 
 export const myProvider = isTestEnvironment
   ? (() => {
@@ -32,6 +37,10 @@ export function getLanguageModel(modelId: string) {
     return myProvider.languageModel(modelId);
   }
 
+  if (modelId.startsWith("mistral-")) {
+    return mistral.languageModel(modelId);
+  }
+
   const isReasoningModel =
     modelId.includes("reasoning") || modelId.endsWith("-thinking");
 
@@ -51,12 +60,12 @@ export function getTitleModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("title-model");
   }
-  return gateway.languageModel("google/gemini-2.5-flash-lite");
+  return mistral.languageModel("mistral-small-latest");
 }
 
 export function getArtifactModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("artifact-model");
   }
-  return gateway.languageModel("anthropic/claude-haiku-4.5");
+  return mistral.languageModel("mistral-small-latest");
 }

@@ -15,10 +15,14 @@
     "db:pull": "drizzle-kit pull",
     "db:check": "drizzle-kit check",
     "db:up": "drizzle-kit up",
-    "test": "export PLAYWRIGHT=True && pnpm exec playwright test"
+    "db:sync": "node migrate-neon.cjs",
+    "test": "export PLAYWRIGHT=True && pnpm exec playwright test",
+    "ingest:legal": "tsx scripts/ingest-legal-docs.ts"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^3.0.15",
+    "@ai-sdk/groq": "^3.0.24",
+    "@ai-sdk/mistral": "^3.0.20",
     "@ai-sdk/provider": "^3.0.3",
     "@ai-sdk/react": "3.0.39",
     "@codemirror/lang-javascript": "^6.2.2",
@@ -27,6 +31,7 @@
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.35.3",
     "@icons-pack/react-simple-icons": "^13.7.0",
+    "@neondatabase/serverless": "^0.10.4",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/api-logs": "^0.200.0",
     "@radix-ui/react-collapsible": "^1.1.12",
@@ -46,6 +51,7 @@
     "@vercel/blob": "^0.24.1",
     "@vercel/functions": "^2.0.0",
     "@vercel/otel": "^1.12.0",
+    "@xenova/transformers": "^2.17.2",
     "@xyflow/react": "^12.10.0",
     "ai": "6.0.37",
     "bcrypt-ts": "^5.0.2",
