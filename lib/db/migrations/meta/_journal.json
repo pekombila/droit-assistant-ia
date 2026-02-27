@@ -99,6 +99,13 @@
       "when": 1740499200000,
       "tag": "0013_update_vector_dimensions",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1740585600000,
+      "tag": "0014_vector_1024_mistral_embed",
+      "breakpoints": true
     }
   ]
 }

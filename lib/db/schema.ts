@@ -162,7 +162,7 @@ export const legalChunk = pgTable(
     chunkIndex: integer("chunkIndex").notNull(),
     articleNumber: varchar("articleNumber", { length: 20 }),
     content: text("content").notNull(),
-    embedding: vector("embedding", { dimensions: 384 }),
+    embedding: vector("embedding", { dimensions: 1024 }),
     tokens: integer("tokens"),
     createdAt: timestamp("createdAt").notNull().defaultNow(),
   },

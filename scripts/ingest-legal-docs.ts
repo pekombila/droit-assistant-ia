@@ -97,6 +97,9 @@ async function main() {
 
       const embedding = await embedPassage(chunk.content);
 
+      // Petit délai pour éviter de saturer l'API Mistral
+      await new Promise((r) => setTimeout(r, 200));
+
       await db.insert(legalChunk).values({
         id: chunkId,
         documentId: docId,
