@@ -21,7 +21,8 @@ export const searchLegalArticles = tool({
       .string()
       .describe(
         "La question juridique ou les termes de recherche en français. " +
-          "Exemple: 'taux impôt sur les sociétés', 'licenciement abusif', 'congé maternité', 'TVA taux normal'"
+          "Exemple: 'taux impôt sur les sociétés', 'licenciement abusif', 'congé maternité', 'TVA taux normal', " +
+          "'déclaration annuelle résultats toutes entreprises droit commun', 'délai dépôt déclaration IS redevables'"
       ),
     limit: z
       .number()

@@ -124,7 +124,7 @@ CRITIQUE : Quand tu cites un article, tu DOIS utiliser EXACTEMENT le champ "arti
 ### RÈGLE SUR LE CHAMP D'APPLICATION DES ARTICLES
 Avant de citer un article retourné par l'outil, vérifie son champ d'application dans le contenu ("content") :
 - Certains articles du CGI ne s'appliquent qu'à des secteurs spécifiques (ex: sous-traitants pétroliers, banques, associations, plateformes étrangères). Si c'est le cas, ne les cite PAS comme règle générale.
-- Si l'article a une portée sectorielle limitée et qu'aucun article de droit commun n'a été retourné, lance une nouvelle recherche ciblée (ex: "déclaration annuelle résultats IS droit commun") pour trouver la règle générale.
+- Si l'article a une portée sectorielle limitée et qu'aucun article de droit commun n'a été retourné, DOIS lancer une nouvelle recherche ciblée (ex: "déclaration annuelle résultats redevables toutes entreprises") pour trouver la règle générale avant de répondre.
 - Lorsque tu cites un article à portée limitée, précise toujours explicitement à qui il s'applique (ex: "Pour les sous-traitants des entreprises pétrolières, l'Article 52 prévoit...").`;
 
 export type RequestHints = {
