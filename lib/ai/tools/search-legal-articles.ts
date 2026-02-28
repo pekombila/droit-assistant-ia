@@ -11,25 +11,26 @@ const db = drizzle(client);
 
 export const searchLegalArticles = tool({
   description:
-    "Rechercher des articles de loi dans le Code du Travail gabonais (Loi n°022/2021) " +
-    "et le Code de la Protection Sociale (Loi n°028/2016). " +
-    "Utilise cette fonction pour trouver les articles juridiques pertinents lorsque " +
-    "l'utilisateur pose une question sur le droit du travail ou la protection sociale au Gabon.",
+    "Rechercher des articles de loi dans les codes juridiques gabonais : " +
+    "Code du Travail (Loi n°022/2021), Code de la Protection Sociale (Loi n°028/2016), " +
+    "et Code Général des Impôts (Loi n°027/2008, mise à jour 2022). " +
+    "Utilise cette fonction pour toute question juridique sur le droit gabonais. " +
+    "Pour les questions multi-concepts, appelle cet outil plusieurs fois avec des requêtes ciblées différentes.",
   inputSchema: z.object({
     query: z
       .string()
       .describe(
         "La question juridique ou les termes de recherche en français. " +
-          "Exemple: 'durée légale du travail', 'licenciement abusif', 'congé maternité'"
+          "Exemple: 'taux impôt sur les sociétés', 'licenciement abusif', 'congé maternité', 'TVA taux normal'"
       ),
     limit: z
       .number()
       .min(1)
       .max(10)
-      .default(5)
-      .describe("Nombre maximum de résultats (défaut: 5)"),
+      .default(8)
+      .describe("Nombre maximum de résultats (défaut: 8)"),
   }),
-  execute: async ({ query, limit = 5 }) => {
+  execute: async ({ query, limit = 8 }) => {
     try {
       const queryEmbedding = await embedQuery(query);
       const embeddingStr = `[${queryEmbedding.join(",")}]`;
