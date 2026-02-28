@@ -343,43 +343,7 @@ const PurePreviewMessage = ({
             }
 
             if (type === "tool-searchLegalArticles") {
-              const { toolCallId, state } = part;
-              const query =
-                (part.input as { query?: string } | undefined)?.query ?? "";
-              const output =
-                state === "output-available"
-                  ? (part.output as {
-                      found?: boolean;
-                      count?: number;
-                      message?: string;
-                    } | null)
-                  : null;
-
-              return (
-                <Tool defaultOpen={false} key={toolCallId}>
-                  <ToolHeader
-                    state={state}
-                    type="tool-searchLegalArticles"
-                  />
-                  <ToolContent>
-                    {query && (
-                      <div className="border-b px-4 py-3">
-                        <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
-                          Requête
-                        </p>
-                        <p className="mt-1 text-sm">{query}</p>
-                      </div>
-                    )}
-                    {output && (
-                      <div className="px-4 py-3 text-sm">
-                        {output.found
-                          ? `${output.count ?? 0} article(s) trouvé(s)`
-                          : (output.message ?? "Aucun article trouvé")}
-                      </div>
-                    )}
-                  </ToolContent>
-                </Tool>
-              );
+              return null;
             }
 
             return null;
