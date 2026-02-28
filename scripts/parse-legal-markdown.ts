@@ -66,9 +66,9 @@ export function parseLegalMarkdown(
       currentSection = trimmed.replace(/^#+\s*/, "");
     }
 
-    // Detect article start: **Article 15.**, Article 1er., Art. 3, etc.
+    // Detect article start: **Article 15.**, Article 1er., Art. 3, Art.11-I-1-a, Art.P-816, etc.
     const articleMatch = trimmed.match(
-      /^\*{0,2}Art(?:icle)?\.?\s*(\d+(?:\s*(?:bis|ter|quater|quinquies|sexies|septies|octies|novies|decies))?(?:er|ère)?(?:-\d+)?)\b/i
+      /^\*{0,2}Art(?:icle)?\.?\s*((?:[A-Z]-)?(?:\d+(?:[-–][A-Za-z0-9]+)*)(?:\s*(?:bis|ter|quater|quinquies|sexies|septies|octies|novies|decies))?(?:er|ère)?)/i
     );
 
     if (articleMatch) {

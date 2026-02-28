@@ -24,6 +24,11 @@ const LEGAL_DOCS = [
     title: "Code de la Protection Sociale",
     lawReference: "Loi n°028/2016",
   },
+  {
+    file: "CODE-GENERAL-DES-IMPOTS-2022.md",
+    title: "Code Général des Impôts du Gabon",
+    lawReference: "Loi n°027/2008 du 22 janvier 2009 (mise à jour 2022)",
+  },
 ];
 
 async function main() {

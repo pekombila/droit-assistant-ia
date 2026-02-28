@@ -44,7 +44,10 @@ export async function embedQuery(text: string): Promise<number[]> {
 
 /**
  * Generate embedding for a document passage.
+ * Truncates to ~8000 tokens max (mistral-embed limit is 8192 tokens, ~4 chars/token).
  */
 export async function embedPassage(text: string): Promise<number[]> {
-  return getEmbedding(text);
+  const MAX_CHARS = 15000; // ~8000 tokens @ ~1.9 chars/token (French legal text)
+  const truncated = text.length > MAX_CHARS ? text.slice(0, MAX_CHARS) : text;
+  return getEmbedding(truncated);
 }
