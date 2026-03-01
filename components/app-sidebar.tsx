@@ -7,7 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
-import { PlusIcon, TrashIcon } from "@/components/icons";
+import { PlusIcon, SidebarLeftIcon, TrashIcon } from "@/components/icons";
 import {
   getChatHistoryPaginationKey,
   SidebarHistory,
@@ -36,7 +36,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
-  const { setOpenMobile } = useSidebar();
+  const { setOpenMobile, toggleSidebar } = useSidebar();
   const { mutate } = useSWRConfig();
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
@@ -64,17 +64,27 @@ export function AppSidebar({ user }: { user: User | undefined }) {
         <SidebarHeader>
           <SidebarMenu>
             <div className="flex flex-row items-center justify-between">
-              <Link
-                className="flex flex-row items-center gap-3"
-                href="/"
-                onClick={() => {
-                  setOpenMobile(false);
-                }}
-              >
-                <span className="cursor-pointer rounded-md px-2 font-semibold text-lg hover:bg-muted">
-                  Lexis
-                </span>
-              </Link>
+              <div className="flex flex-row items-center gap-1">
+                <Button
+                  className="h-8 p-1 md:h-fit md:p-2"
+                  onClick={toggleSidebar}
+                  type="button"
+                  variant="ghost"
+                >
+                  <SidebarLeftIcon size={16} />
+                </Button>
+                <Link
+                  className="flex flex-row items-center gap-3"
+                  href="/"
+                  onClick={() => {
+                    setOpenMobile(false);
+                  }}
+                >
+                  <span className="cursor-pointer rounded-md px-2 font-semibold text-lg hover:bg-muted">
+                    Lexis
+                  </span>
+                </Link>
+              </div>
               <div className="flex flex-row gap-1">
                 {user && (
                   <Tooltip>
