@@ -64,27 +64,17 @@ export function AppSidebar({ user }: { user: User | undefined }) {
         <SidebarHeader>
           <SidebarMenu>
             <div className="flex flex-row items-center justify-between">
-              <div className="flex flex-row items-center gap-1">
-                <Button
-                  className="h-8 p-1 md:h-fit md:p-2"
-                  onClick={toggleSidebar}
-                  type="button"
-                  variant="ghost"
-                >
-                  <SidebarLeftIcon size={16} />
-                </Button>
-                <Link
-                  className="flex flex-row items-center gap-3"
-                  href="/"
-                  onClick={() => {
-                    setOpenMobile(false);
-                  }}
-                >
-                  <span className="cursor-pointer rounded-md px-2 font-semibold text-lg hover:bg-muted">
-                    Lexis
-                  </span>
-                </Link>
-              </div>
+              <Link
+                className="flex flex-row items-center gap-3"
+                href="/"
+                onClick={() => {
+                  setOpenMobile(false);
+                }}
+              >
+                <span className="cursor-pointer rounded-md px-2 font-semibold text-lg hover:bg-muted">
+                  Lexis
+                </span>
+              </Link>
               <div className="flex flex-row gap-1">
                 {user && (
                   <Tooltip>
@@ -120,6 +110,21 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                   </TooltipTrigger>
                   <TooltipContent align="end" className="hidden md:block">
                     Nouvelle conversation
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className="h-8 p-1 md:h-fit md:p-2"
+                      onClick={toggleSidebar}
+                      type="button"
+                      variant="ghost"
+                    >
+                      <SidebarLeftIcon size={16} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent align="end" className="hidden md:block">
+                    Réduire la barre latérale
                   </TooltipContent>
                 </Tooltip>
               </div>
