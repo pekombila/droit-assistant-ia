@@ -14,7 +14,7 @@ import {
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import type { ArtifactKind } from "@/components/artifact";
-import type { VisibilityType } from "@/components/visibility-selector";
+
 import { ChatSDKError } from "../errors";
 import { generateUUID } from "../utils";
 import {
@@ -88,7 +88,7 @@ export async function saveChat({
   id: string;
   userId: string;
   title: string;
-  visibility: VisibilityType;
+  visibility: "private" | "public";
 }) {
   try {
     return await db.insert(chat).values({

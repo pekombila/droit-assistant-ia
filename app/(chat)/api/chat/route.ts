@@ -60,8 +60,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { id, message, messages, selectedChatModel, selectedVisibilityType } =
-      requestBody;
+    const { id, message, messages, selectedChatModel } = requestBody;
 
     const session = await auth();
 
@@ -98,7 +97,7 @@ export async function POST(request: Request) {
         id,
         userId: session.user.id,
         title: "New chat",
-        visibility: selectedVisibilityType,
+        visibility: "private",
       });
       titlePromise = generateTitleFromUserMessage({ message });
     }
