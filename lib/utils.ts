@@ -94,7 +94,16 @@ export function getTrailingMessageId({
 }
 
 export function sanitizeText(text: string) {
-  return text.replace('<has_function_call>', '');
+  return text
+    // Remove Mistral's function-call marker
+    .replace('<has_function_call>', '')
+    // Remove Mistral's text representation of tool calls:
+    // formats: toolName{JSON}  or  toolName(callId{JSON})
+    .replace(
+      /\b(?:searchLegalArticles|getWeather|createDocument|updateDocument|requestSuggestions)\s*(?:\([^({]*)?\{[\s\S]*?\}(?:\s*\))?/g,
+      '',
+    )
+    .trim();
 }
 
 export function convertToUIMessages(messages: DBMessage[]): ChatMessage[] {

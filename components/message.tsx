@@ -123,6 +123,9 @@ const PurePreviewMessage = ({
             }
 
             if (type === "text") {
+              const sanitized = sanitizeText(part.text);
+              if (!sanitized) return null;
+
               if (mode === "view") {
                 return (
                   <div key={key}>
@@ -140,7 +143,7 @@ const PurePreviewMessage = ({
                           : undefined
                       }
                     >
-                      <Response>{sanitizeText(part.text)}</Response>
+                      <Response>{sanitized}</Response>
                     </MessageContent>
                   </div>
                 );
