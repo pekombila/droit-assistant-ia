@@ -67,5 +67,5 @@ export function getArtifactModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("artifact-model");
   }
-  return mistral.languageModel("mistral-small-latest");
+  return mistral.languageModel("mistral-large-latest");
 }
