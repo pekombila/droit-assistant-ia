@@ -12,28 +12,19 @@ export const textDocumentHandler = createDocumentHandler<"text">({
   onCreateDocument: async ({ title, dataStream }) => {
     let draftContent = "";
 
-    const { fullStream } = streamText({
+    const { textStream } = streamText({
       model: getArtifactModel(),
       system: documentSystemPrompt,
       prompt: title,
     });
 
-    for await (const delta of fullStream) {
-      const { type } = delta;
-
-      if (type === "text-delta") {
-        const { text } = delta;
-
-        draftContent += text;
-
-        dataStream.write({
-          type: "data-textDelta",
-          data: text,
-          transient: true,
-        });
-      } else if (type === "error") {
-        throw delta.error;
-      }
+    for await (const text of textStream) {
+      draftContent += text;
+      dataStream.write({
+        type: "data-textDelta",
+        data: text,
+        transient: true,
+      });
     }
 
     return draftContent;
@@ -41,28 +32,19 @@ export const textDocumentHandler = createDocumentHandler<"text">({
   onUpdateDocument: async ({ document, description, dataStream }) => {
     let draftContent = "";
 
-    const { fullStream } = streamText({
+    const { textStream } = streamText({
       model: getArtifactModel(),
       system: updateDocumentPrompt(document.content, "text"),
       prompt: description,
     });
 
-    for await (const delta of fullStream) {
-      const { type } = delta;
-
-      if (type === "text-delta") {
-        const { text } = delta;
-
-        draftContent += text;
-
-        dataStream.write({
-          type: "data-textDelta",
-          data: text,
-          transient: true,
-        });
-      } else if (type === "error") {
-        throw delta.error;
-      }
+    for await (const text of textStream) {
+      draftContent += text;
+      dataStream.write({
+        type: "data-textDelta",
+        data: text,
+        transient: true,
+      });
     }
 
     return draftContent;
