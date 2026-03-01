@@ -15,10 +15,10 @@ type SuggestedActionsProps = {
 
 function PureSuggestedActions({ chatId, sendMessage }: SuggestedActionsProps) {
   const suggestedActions = [
-    "What are the advantages of using Next.js?",
-    "Write code to demonstrate Dijkstra's algorithm",
-    "Help me write an essay about Silicon Valley",
-    "What is the weather in San Francisco?",
+    "Quelles sont les conditions de validité d'un contrat à durée déterminée (CDD) au Gabon ?",
+    "Quelles sont les démarches pour affilier un nouvel employé à la CNSS ?",
+    "Quel est le délai de préavis exigé en cas de licenciement pour motif économique ?",
+    "Comment est calculé l'Impôt sur les Sociétés (IS) au Gabon ?",
   ];
 
   return (
