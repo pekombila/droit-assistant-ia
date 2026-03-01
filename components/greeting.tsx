@@ -2,27 +2,23 @@ import { motion } from "framer-motion";
 
 export const Greeting = () => {
   return (
-    <div
-      className="mx-auto mt-4 flex size-full max-w-3xl flex-col justify-center px-4 md:mt-16 md:px-8"
-      key="overview"
-    >
+    <div className="flex flex-col items-center gap-3 text-center">
       <motion.div
         animate={{ opacity: 1, y: 0 }}
-        className="font-semibold text-xl md:text-2xl"
-        exit={{ opacity: 0, y: 10 }}
+        className="font-semibold text-3xl md:text-4xl"
         initial={{ opacity: 0, y: 10 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.2 }}
       >
         Bienvenue sur Lexis.
       </motion.div>
       <motion.div
         animate={{ opacity: 1, y: 0 }}
-        className="text-xl text-zinc-500 md:text-2xl"
-        exit={{ opacity: 0, y: 10 }}
+        className="max-w-xl text-lg text-zinc-500 md:text-xl"
         initial={{ opacity: 0, y: 10 }}
-        transition={{ delay: 0.6 }}
+        transition={{ delay: 0.3 }}
       >
-        Posez votre question sur le droit du travail, la protection sociale ou la fiscalité gabonaise.
+        Posez votre question sur le droit du travail, la protection sociale ou
+        la fiscalité gabonaise.
       </motion.div>
     </div>
   );

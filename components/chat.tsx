@@ -25,6 +25,7 @@ import type { Attachment, ChatMessage } from "@/lib/types";
 import { fetcher, fetchWithErrorHandlers, generateUUID } from "@/lib/utils";
 import { Artifact } from "./artifact";
 import { useDataStream } from "./data-stream-provider";
+import { Greeting } from "./greeting";
 import { Messages } from "./messages";
 import { MultimodalInput } from "./multimodal-input";
 import { getChatHistoryPaginationKey } from "./sidebar-history";
@@ -183,37 +184,65 @@ export function Chat({
           isReadonly={isReadonly}
         />
 
-        <Messages
-          addToolApprovalResponse={addToolApprovalResponse}
-          chatId={id}
-          isArtifactVisible={isArtifactVisible}
-          isReadonly={isReadonly}
-          messages={messages}
-          regenerate={regenerate}
-          selectedModelId={initialChatModel}
-          setMessages={setMessages}
-          status={status}
-          votes={votes}
-        />
-
-        <div className="sticky bottom-0 z-1 mx-auto flex w-full max-w-4xl gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4">
-          {!isReadonly && (
-            <MultimodalInput
-              attachments={attachments}
+        {messages.length === 0 ? (
+          /* ── État 1 : Page d'accueil centrée ── */
+          <div className="flex flex-1 flex-col items-center justify-center gap-8 overflow-y-auto px-2 pb-8 md:px-4">
+            <Greeting />
+            {!isReadonly && (
+              <div className="w-full max-w-4xl">
+                <MultimodalInput
+                  attachments={attachments}
+                  chatId={id}
+                  input={input}
+                  messages={messages}
+                  onModelChange={setCurrentModelId}
+                  selectedModelId={currentModelId}
+                  sendMessage={sendMessage}
+                  setAttachments={setAttachments}
+                  setInput={setInput}
+                  setMessages={setMessages}
+                  status={status}
+                  stop={stop}
+                />
+              </div>
+            )}
+          </div>
+        ) : (
+          /* ── État 2 : Mode chat standard ── */
+          <>
+            <Messages
+              addToolApprovalResponse={addToolApprovalResponse}
               chatId={id}
-              input={input}
+              isArtifactVisible={isArtifactVisible}
+              isReadonly={isReadonly}
               messages={messages}
-              onModelChange={setCurrentModelId}
-              selectedModelId={currentModelId}
-              sendMessage={sendMessage}
-              setAttachments={setAttachments}
-              setInput={setInput}
+              regenerate={regenerate}
+              selectedModelId={initialChatModel}
               setMessages={setMessages}
               status={status}
-              stop={stop}
+              votes={votes}
             />
-          )}
-        </div>
+
+            <div className="sticky bottom-0 z-1 mx-auto flex w-full max-w-4xl gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4">
+              {!isReadonly && (
+                <MultimodalInput
+                  attachments={attachments}
+                  chatId={id}
+                  input={input}
+                  messages={messages}
+                  onModelChange={setCurrentModelId}
+                  selectedModelId={currentModelId}
+                  sendMessage={sendMessage}
+                  setAttachments={setAttachments}
+                  setInput={setInput}
+                  setMessages={setMessages}
+                  status={status}
+                  stop={stop}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       <Artifact

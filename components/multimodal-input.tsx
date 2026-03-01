@@ -270,15 +270,6 @@ function PureMultimodalInput({
 
   return (
     <div className={cn("relative flex w-full flex-col gap-4", className)}>
-      {messages.length === 0 &&
-        attachments.length === 0 &&
-        uploadQueue.length === 0 && (
-          <SuggestedActions
-            chatId={chatId}
-            sendMessage={sendMessage}
-          />
-        )}
-
       <input
         className="pointer-events-none fixed -top-4 -left-4 size-0.5 opacity-0"
         multiple
@@ -365,6 +356,12 @@ function PureMultimodalInput({
           )}
         </PromptInputToolbar>
       </PromptInput>
+
+      {messages.length === 0 &&
+        attachments.length === 0 &&
+        uploadQueue.length === 0 && (
+          <SuggestedActions chatId={chatId} sendMessage={sendMessage} />
+        )}
     </div>
   );
 }
