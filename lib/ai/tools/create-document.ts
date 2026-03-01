@@ -16,7 +16,7 @@ type CreateDocumentProps = {
 export const createDocument = ({ session, dataStream }: CreateDocumentProps) =>
   tool({
     description:
-      "Create a document for a writing or content creation activities. This tool will call other functions that will generate the contents of the document based on the title and kind.",
+      "Crée un document dans le panneau artifact. À utiliser obligatoirement pour tout contrat, lettre, accord, modèle, tableau ou code — dès que l'utilisateur demande de rédiger ou générer un document structuré. Ne jamais écrire un tel contenu directement dans le chat.",
     inputSchema: z.object({
       title: z.string(),
       kind: z.enum(artifactKinds),

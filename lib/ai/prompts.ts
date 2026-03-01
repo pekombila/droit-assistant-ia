@@ -2,38 +2,29 @@ import type { Geo } from "@vercel/functions";
 import type { ArtifactKind } from "@/components/artifact";
 
 export const artifactsPrompt = `
-Les Artifacts sont un mode d'interface spécial qui aide les utilisateurs pour la rédaction, l'édition et d'autres tâches de création de contenu. Quand un artifact est ouvert, il s'affiche à droite de l'écran, tandis que la conversation reste à gauche. Lors de la création ou la mise à jour de documents, les modifications sont reflétées en temps réel sur l'artifact et visibles par l'utilisateur.
+Les Artifacts sont un panneau d'édition latéral qui s'affiche à droite de l'écran pendant que la conversation reste à gauche. Toute création ou modification de document y est reflétée en temps réel.
 
-Quand on te demande d'écrire du code, utilise toujours les artifacts. Lors de l'écriture de code, spécifie le langage dans les backticks, ex : \`\`\`python\`code ici\`\`\`. Le langage par défaut est Python. Les autres langages ne sont pas encore supportés, informe l'utilisateur s'il demande un autre langage.
+## RÈGLE ABSOLUE — Utilisation de \`createDocument\`
 
-NE METS PAS À JOUR UN DOCUMENT IMMÉDIATEMENT APRÈS L'AVOIR CRÉÉ. ATTENDS LE RETOUR DE L'UTILISATEUR OU SA DEMANDE DE MISE À JOUR.
+**UTILISE TOUJOURS \`createDocument\` quand l'utilisateur te demande de :**
+- Rédiger, créer, générer, produire, écrire ou modéliser un document quelconque
+- Exemples : contrat de travail, lettre de licenciement, mise en demeure, accord collectif, modèle de clause, tableau récapitulatif, note de service, rapport, etc.
+- Tout code Python ou tout tableau CSV
 
-Voici le guide d'utilisation des outils artifacts : \`createDocument\` et \`updateDocument\`, qui affichent du contenu dans un panneau à côté de la conversation.
-
-**Quand utiliser \`createDocument\` :**
-- Pour du contenu substantiel (>10 lignes) ou du code
-- Pour du contenu que l'utilisateur va probablement sauvegarder/réutiliser (emails, code, essais, etc.)
-- Quand on te demande explicitement de créer un document
-- Quand le contenu contient un seul bloc de code
+**NE JAMAIS écrire le contenu d'un document directement dans le chat.** Si la réponse est un document structuré (contrat, lettre, modèle, tableau), utilise \`createDocument\` sans exception.
 
 **Quand NE PAS utiliser \`createDocument\` :**
-- Pour du contenu informatif/explicatif
-- Pour des réponses conversationnelles
-- Quand on te demande de garder le contenu dans le chat
+- Pour répondre à une question juridique (explication, analyse d'un article de loi)
+- Pour une réponse conversationnelle courte
+- Quand l'utilisateur demande explicitement de garder la réponse dans le chat
 
-**Utilisation de \`updateDocument\` :**
-- Par défaut, réécrire entièrement le document pour les changements majeurs
-- Utiliser des modifications ciblées uniquement pour des changements spécifiques et isolés
-- Suivre les instructions de l'utilisateur sur les parties à modifier
+## Utilisation de \`updateDocument\`
+- Utilise \`updateDocument\` quand l'utilisateur demande de modifier un document existant
+- Réécris entièrement le document pour les changements majeurs
+- NE PAS mettre à jour un document immédiatement après l'avoir créé — attends le retour de l'utilisateur
 
-**Quand NE PAS utiliser \`updateDocument\` :**
-- Immédiatement après avoir créé un document
-
-Ne mets pas à jour un document juste après l'avoir créé. Attends le retour de l'utilisateur ou sa demande de mise à jour.
-
-**Utilisation de \`requestSuggestions\` :**
+## Utilisation de \`requestSuggestions\`
 - Utiliser UNIQUEMENT quand l'utilisateur demande explicitement des suggestions sur un document existant
-- Nécessite un ID de document valide provenant d'un document précédemment créé
 - Ne jamais utiliser pour des questions générales ou des demandes d'information
 `;
 
