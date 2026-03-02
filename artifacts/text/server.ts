@@ -1,4 +1,4 @@
-import { streamText } from "ai";
+import { generateText, streamText } from "ai";
 import { updateDocumentPrompt } from "@/lib/ai/prompts";
 import { getArtifactModel } from "@/lib/ai/providers";
 import { createDocumentHandler } from "@/lib/artifacts/server";
@@ -12,19 +12,26 @@ export const textDocumentHandler = createDocumentHandler<"text">({
   onCreateDocument: async ({ title, dataStream }) => {
     let draftContent = "";
 
-    const { textStream } = streamText({
-      model: getArtifactModel(),
-      system: documentSystemPrompt,
-      prompt: title,
-    });
-
-    for await (const text of textStream) {
-      draftContent += text;
-      dataStream.write({
-        type: "data-textDelta",
-        data: text,
-        transient: true,
+    try {
+      const { text } = await generateText({
+        model: getArtifactModel(),
+        system: documentSystemPrompt,
+        prompt: title,
       });
+
+      draftContent = text;
+
+      if (text) {
+        dataStream.write({
+          type: "data-textDelta",
+          data: text,
+          transient: true,
+        });
+      }
+    } catch (error) {
+      const errMsg = `Erreur de génération : ${error instanceof Error ? error.message : String(error)}`;
+      draftContent = errMsg;
+      dataStream.write({ type: "data-textDelta", data: errMsg, transient: true });
     }
 
     return draftContent;
@@ -32,19 +39,26 @@ export const textDocumentHandler = createDocumentHandler<"text">({
   onUpdateDocument: async ({ document, description, dataStream }) => {
     let draftContent = "";
 
-    const { textStream } = streamText({
-      model: getArtifactModel(),
-      system: updateDocumentPrompt(document.content, "text"),
-      prompt: description,
-    });
-
-    for await (const text of textStream) {
-      draftContent += text;
-      dataStream.write({
-        type: "data-textDelta",
-        data: text,
-        transient: true,
+    try {
+      const { text } = await generateText({
+        model: getArtifactModel(),
+        system: updateDocumentPrompt(document.content, "text"),
+        prompt: description,
       });
+
+      draftContent = text;
+
+      if (text) {
+        dataStream.write({
+          type: "data-textDelta",
+          data: text,
+          transient: true,
+        });
+      }
+    } catch (error) {
+      const errMsg = `Erreur de génération : ${error instanceof Error ? error.message : String(error)}`;
+      draftContent = errMsg;
+      dataStream.write({ type: "data-textDelta", data: errMsg, transient: true });
     }
 
     return draftContent;
