@@ -13,12 +13,13 @@ export const textDocumentHandler = createDocumentHandler<"text">({
     let draftContent = "";
 
     try {
-      const { text } = await generateText({
+      const result = await generateText({
         model: getArtifactModel(),
         system: documentSystemPrompt,
         prompt: title,
       });
 
+      const { text, finishReason, usage } = result;
       draftContent = text;
 
       if (text) {
@@ -27,6 +28,13 @@ export const textDocumentHandler = createDocumentHandler<"text">({
           data: text,
           transient: true,
         });
+      } else {
+        const debugMsg =
+          `[Debug artifact] finishReason="${finishReason}" ` +
+          `promptTokens=${usage?.promptTokens ?? "?"} ` +
+          `completionTokens=${usage?.completionTokens ?? "?"}`;
+        draftContent = debugMsg;
+        dataStream.write({ type: "data-textDelta", data: debugMsg, transient: true });
       }
     } catch (error) {
       const errMsg = `Erreur de génération : ${error instanceof Error ? error.message : String(error)}`;
